@@ -6,10 +6,10 @@
 #include "user/user.h"
 
 int main(int argc, char *argv[]) {
-//  if (argc != 2) {
-//    printf("Error. Enter for example: sleep 2\n");
-//    exit(-1);
-//  }
+  if (argc != 2) {
+    printf("Error. Enter for example: sleep 2\n");
+    exit(-1);
+  }
   int sleep_time = atoi(argv[1]);
   if (sleep_time < 0) {
     printf("Invalid sleep time\n");
