@@ -10,11 +10,11 @@ int main(int argc, char *argv[]) {
 //    printf("Error. Enter for example: sleep 2\n");
 //    exit(-1);
 //  }
-  int sleep_time = atoi(argv[1]);
-  if (sleep_time < 0) {
-    printf("Invalid sleep time\n");
-    exit(-1);
-  }
-  sleep(sleep_time);
+//   int sleep_time = atoi(argv[1]);
+//   if (sleep_time < 0) {
+//     printf("Invalid sleep time\n");
+//     exit(-1);
+//   }
+  sleep(atoi(argv[1]));
   exit(0);
 }
