@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
   char buf[1]= "Y";
   if (!pid) {
     // close(fds[0]);
-    printf("%d\n",pid);
+    printf("child: %d\n",pid);
     int isok = write(fds[1], buf, 1);
     if (!isok) {
       printf(" write failed\n");
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 
     exit(0);
   } else {
-    printf("%d\n",pid);
+    printf("parent: %d\n",pid);
     // close(fds[1]);
     int isok = read(fds[0], buf, 1);
     if (!isok) {
