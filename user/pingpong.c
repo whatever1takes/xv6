@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
   const char *byte = "Y";
   if (!pid) {
     // close(fds[0]);
-    printf("%d",pid);
+    printf("%d\n",pid);
     int isok = write(fds[1], byte, 1);
     if (!isok) {
       printf(" write failed\n");
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 
     exit(0);
   } else {
-    printf("%d",pid);
+    printf("%d\n",pid);
     // close(fds[1]);
     int isok = read(fds[0], "Y", 1);
     if (!isok) {
