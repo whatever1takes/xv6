@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
   } else {
     printf("%d",pid);
     // close(fds[1]);
-    int isok = read(fds[0], byte, 1);
+    int isok = read(fds[0], "Y", 1);
     if (!isok) {
       printf(" read failed\n");
       exit(1);
