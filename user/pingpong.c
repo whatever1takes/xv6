@@ -1,5 +1,5 @@
-#include "../kernel/types.h"
 #include "../kernel/stat.h"
+#include "../kernel/types.h"
 #include "../user/user.h"
 
 int main(int argc, char *argv[]) {
@@ -21,8 +21,7 @@ int main(int argc, char *argv[]) {
       exit(1);
     }
     printf("%d: received ping\n", pid);
-    int isok = write(child_to_parent[1], &buf, 1);
-    if (isok != 1) {
+    if (write(child_to_parent[1], &buf, 1) != 1) {
       printf("child write failed\n");
       exit(1);
     }
@@ -34,12 +33,11 @@ int main(int argc, char *argv[]) {
     close(child_to_parent[1]);
     close(parent_to_child[0]);
 
-    int writeok = write(parent_to_child[1], &buf, 1);
-    if (writeok != 1) {
+    if (write(parent_to_child[1], &buf, 1) != 1) {
+      printf("parent write failed\n");
       exit(1);
     }
-    int isok = read(child_to_parent[0], &buf, 1);
-    if (isok != 1) {
+    if (read(child_to_parent[0], &buf, 1) != 1) {
       printf("parent read failed\n");
       exit(1);
     }
