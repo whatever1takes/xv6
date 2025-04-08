@@ -1,46 +1,52 @@
-#include "kernel/types.h"
-#include "kernel/stat.h"
-#include "user/user.h"
+#include "../kernel/types.h"
+#include "../kernel/stat.h"
+#include "../user/user.h"
 
 int main(int argc, char *argv[]) {
-  int fds[2];
-  if (pipe(fds) != 0) {
-    printf(" pipe() failed\n");
+  int parent_to_child[2];
+  int child_to_parent[2];
+  if (pipe(parent_to_child) < 0 || pipe(child_to_parent) < 0) {
+    printf("pipe() failed\n");
     exit(1);
   }
 
   int pid = fork(); // child pid==0 | par pid!=0
-  char buf[1] = "Y";
-  if (!pid) {
-    // close(fds[0]);
-    // printf("child: %d\n", pid);
-    int readok = read(fds[0], buf, 1);
-    if (!readok) {
+
+  if (!pid) { // child
+    char buf;
+    close(parent_to_child[1]);
+    close(child_to_parent[0]); // release unused
+    if (read(parent_to_child[0], &buf, 1) != 1) {
+      printf("child read failed\n");
       exit(1);
     }
     printf("%d: received ping\n", pid);
-    int isok = write(fds[1], buf, 1);
-    if (!isok) {
+    int isok = write(child_to_parent[1], &buf, 1);
+    if (isok != 1) {
       printf("child write failed\n");
       exit(1);
     }
-
+    close(parent_to_child[0]);
+    close(child_to_parent[1]); // release all before exit
     exit(0);
   } else {
-    // printf("parent: %d\n", pid);
-    int writeok = write(fds[1], buf, 1);
-    if (!writeok) {
+    char buf = 'Y';
+    close(child_to_parent[1]);
+    close(parent_to_child[0]);
+
+    int writeok = write(parent_to_child[1], &buf, 1);
+    if (writeok != 1) {
       exit(1);
     }
-    // close(fds[1]);
-    int isok = read(fds[0], buf, 1);
-    if (!isok) {
+    int isok = read(child_to_parent[0], &buf, 1);
+    if (isok != 1) {
       printf("parent read failed\n");
       exit(1);
     }
     printf("%d: received pong\n", pid);
+
+    close(parent_to_child[1]);
+    close(child_to_parent[0]); // release all before exit
     exit(0);
   }
-
-  exit(0);
 }
